@@ -17,15 +17,17 @@ public class RNWebGLTextureBitmap extends RNWebGLTexture implements Runnable {
         super(config, source.getWidth(), source.getHeight());
         boolean yflip = config.hasKey("yflip") && config.getBoolean("yflip");
         Bitmap src;
-        if (yflip) {
+        source.setPremultiplied( false );
+        /*if (yflip) {
             Matrix matrix = new Matrix();
             matrix.postScale(1, -1);
             src = Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
             src.setHasAlpha(source.hasAlpha());
         }
-        else {
+        else {*/
             src = source;
-        }
+            src.setPremultiplied( false );
+        //}
         bitmap = src.copy(src.getConfig(), src.isMutable());
         this.runOnGLThread(this);
     }
@@ -50,8 +52,8 @@ public class RNWebGLTextureBitmap extends RNWebGLTexture implements Runnable {
         int[] boundedBefore = new int[1];
         glGetIntegerv(GL_TEXTURE_BINDING_2D, boundedBefore, 0);
         glBindTexture(GL_TEXTURE_2D, glTexture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         GLUtils.texImage2D(GL_TEXTURE_2D, 0, bitmap, 0);
         // Restore the previous texture bind to not affect user code
         glBindTexture(GL_TEXTURE_2D, boundedBefore[0]);
