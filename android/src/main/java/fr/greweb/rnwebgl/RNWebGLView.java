@@ -28,8 +28,8 @@ public class RNWebGLView extends GLSurfaceView implements GLSurfaceView.Renderer
     reactContext = context;
 
     setEGLContextClientVersion(2);
-    setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-    getHolder().setFormat(PixelFormat.TRANSLUCENT);
+    setEGLConfigChooser(8, 8, 8, 8, 0, 0);
+    getHolder().setFormat(PixelFormat.RGBA_8888);
     setRenderer(this);
   }
 
